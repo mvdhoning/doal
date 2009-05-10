@@ -55,7 +55,10 @@ unit openal;
 interface
 
 uses
-  SysUtils{$IFDEF Win32},Windows{$ENDIF};
+  Classes
+  , SysUtils
+  {$IFDEF Win32},Windows{$ENDIF}
+  ;
 
 { $ DEFINE ALUT} //define ALUT to use alut.dll
 
@@ -120,7 +123,7 @@ type
   // Openal clamped double.
   TALclampd = TALdouble;
   PALclampd = ^TALclampd;
-  
+
   // ALC enumerations.
   TALCenum = integer;
   PALCenum = ^TALCenum;
@@ -1885,6 +1888,7 @@ var
   procedure alutLoadWAVFile(fname: string; var format: TALenum; var data: TALvoid; var size: TALsizei; var freq: TALsizei; var loop: TALint);
   procedure alutLoadWAVMemory(memory: PALbyte; var format: TALenum; var data: TALvoid; var size: TALsizei; var freq: TALsizei; var loop: TALint);
   procedure alutUnloadWAV(format: TALenum; data: TALvoid; size: TALsizei; freq: TALsizei);
+  function LoadWavStream(Stream: Tstream; var format: TALenum; var data: TALvoid; var size: TALsizei; var freq: TALsizei; var loop: TALint): Boolean; //Unofficial
 {$ENDIF}
 
 var
@@ -1906,7 +1910,7 @@ procedure ReadOpenALExtensions;
 
 implementation
 
-uses classes;
+//uses classes;
 
 type
   //WAV file header
