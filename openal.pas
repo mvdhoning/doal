@@ -1915,10 +1915,10 @@ implementation
 type
   //WAV file header
   TWAVHeader = record
-    RIFFHeader: array [1..4] of Char;
+    RIFFHeader: array [1..4] of AnsiChar;
     FileSize: Integer;
-    WAVEHeader: array [1..4] of Char;
-    FormatHeader: array [1..4] of Char;
+    WAVEHeader: array [1..4] of AnsiChar;
+    FormatHeader: array [1..4] of AnsiChar;
     FormatHeaderSize: Integer;
     FormatCode: Word;
     ChannelNumber: Word;
@@ -1967,14 +1967,14 @@ end;
 {$ENDIF}
 
 //ProcName can be case sensitive !!!
-function alProcedure(ProcName : PChar) : Pointer;
+function alProcedure(ProcName : string) : Pointer;
 begin
 Result := NIL;
 if Addr(alGetProcAddress) <> NIL then
- Result := alGetProcAddress(ProcName);
+ Result := alGetProcAddress(PChar(PAnsiChar(AnsiString(ProcName))) );
 if result <> NIL then
  exit;
-Result := GetProcAddress(LibHandle, ProcName);
+Result := GetProcAddress(LibHandle, PChar(ProcName));
 end;
 
 {$IFDEF ALUT}
@@ -1992,7 +1992,7 @@ begin
 
   if (AlutLibHandle <> 0) then
   begin
-    alutInit:= GetProcAddress(AlutLibHandle, 'alutInit');
+    alutInit:= GetProcAddress(AlutLibHandle, alutInit);
     alutExit:= GetProcAddress(AlutLibHandle, 'alutExit');
     alutLoadWAVFile:= GetProcAddress(AlutLibHandle, 'alutLoadWAVFile');
     alutLoadWAVMemory:= GetProcAddress(AlutLibHandle, 'alutLoadWAVMemory');
@@ -2000,7 +2000,7 @@ begin
   end;
 {$ENDIF}
 
-  alGetProcAddress := GetProcAddress(LibHandle, 'alGetProcAddress');
+  alGetProcAddress := GetProcAddress(LibHandle, 'alGetProcAddress'  );
 
   if (LibHandle <> 0) then
   begin
@@ -2208,8 +2208,8 @@ end;
 function LoadWavStream(Stream: Tstream; var format: TALenum; var data: TALvoid; var size: TALsizei; var freq: TALsizei; var loop: TALint): Boolean;
 var
   WavHeader: TWavHeader;
-  readname: pchar;
-  name: string;
+  readname: pansichar;
+  name: ansistring;
   readint: integer;
 begin
     Result:=False;
@@ -2235,6 +2235,7 @@ begin
 
     //go to end of wavheader
     stream.seek((8-44)+12+4+WavHeader.FormatHeaderSize+4,soFromCurrent); //hmm crappy...
+
     //loop to rest of wave file data chunks
     repeat
       //read chunk name
