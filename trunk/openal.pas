@@ -2247,7 +2247,7 @@ begin
         //Get the size of the wave data
         stream.Read(readint,4);
         size:=readint;
-        if WavHeader.BitsPerSample = 8 then size:=size+1; //fix for 8bit???
+        //if WavHeader.BitsPerSample = 8 then size:=size+1; //fix for 8bit???
         //Read the actual wave data
         getmem(data,size);
         stream.Read(Data^, size);
