@@ -54,7 +54,7 @@ begin
   //enumerate devices
   defaultDevice := '';
   deviceList := '';
-  if alcIsExtensionPresent(nil,'ALC_ENUMERATION_EXT') = TRUE then
+  if alcIsExtensionPresent(nil,pchar('ALC_ENUMERATION_EXT')) = TRUE then
   begin
    defaultDevice := alcGetString(nil, ALC_DEFAULT_DEVICE_SPECIFIER);
    deviceList := alcGetString(nil, ALC_DEVICE_SPECIFIER);
@@ -62,12 +62,16 @@ begin
   devices:=TStringList.Create;
 
   //make devices tstringlist
-  devices.Add(string(devicelist));
+  if devicelist<>'' then
+  begin
+  devices.Add(ansistring(devicelist));
   for loop:=0 to 12 do
   begin
     StrCopy(Devicelist, @Devicelist[strlen(pchar(devices.text))-(loop+1)]);
     if length(DeviceList)<=0 then break; //exit loop if no more devices are found
     devices.Add(string(Devicelist));
+  end;
+
   end;
 
   //fill the combobox
@@ -137,7 +141,7 @@ begin
   AlGenBuffers(1, @buffer);
   For Loop:=0 to 1000 do
     data[loop] := Round(50*sin(loop*(5*pi)/50.0)+128);
-  alBufferData(buffer, AL_FORMAT_MONO8, @data, length(data), 11024);
+  alBufferData(buffer, AL_FORMAT_MONO8, @data, length(data)-1, 11024);
 
   //Create Sources
   AlGenSources(1, @source);
