@@ -1,7 +1,7 @@
 object Form1: TForm1
   Left = 192
   Top = 114
-  Caption = 'OpenAL #1'
+  Caption = 'OpenAL #13'
   ClientHeight = 159
   ClientWidth = 197
   Color = clBtnFace
