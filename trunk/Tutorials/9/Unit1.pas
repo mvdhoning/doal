@@ -3,7 +3,7 @@ unit Unit1;
 interface
 
 uses
-  Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs, al, altypes, alut,
+  Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs, OpenAL,
   StdCtrls;
 
 type
@@ -40,7 +40,7 @@ implementation
 
 procedure TForm1.FormCreate(Sender: TObject);
 var
-  argv: array of PChar;
+  argv: array of PAlByte;
   format: TALEnum;
   size: TALSizei;
   freq: TALSizei;
@@ -50,6 +50,7 @@ var
   oggfile: Tmemorystream;
 
 begin
+  InitOpenAL;
   AlutInit(nil,argv);
 
   AlGenBuffers(1, @buffer);
@@ -59,14 +60,14 @@ begin
   begin
    label1.Caption:='Vorbis extension available'; //load and use ogg file
    oggfile:=TMemoryStream.Create;
-   oggfile.LoadFromFile('boom.ogg');
+   oggfile.LoadFromFile('../Media/boom.ogg');
    AlBufferData(buffer, AL_FORMAT_VORBIS_EXT, oggfile.Memory, oggfile.Size, 44800);
    oggfile.Free;
   end
   else
   begin
    label1.Caption:='Vorbis extension not available'; //do things the old way
-   AlutLoadWavFile('ding.wav', format, data, size, freq, loop);
+   AlutLoadWavFile('../Media/ding.wav', format, data, size, freq, loop);
    AlBufferData(buffer, format, data, size, freq);
    AlutUnloadWav(format, data, size, freq);
   end;
