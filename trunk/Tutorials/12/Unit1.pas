@@ -3,7 +3,7 @@ unit Unit1;
 interface
 
 uses
-  Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs, al, altypes, alut, eax,
+  Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs, OpenAL,
   StdCtrls;
 
 type
@@ -11,6 +11,7 @@ type
     Play: TButton;
     Stop: TButton;
     Pause: TButton;
+    Label1: TLabel;
     procedure FormCreate(Sender: TObject);
     procedure PlayClick(Sender: TObject);
     procedure FormDestroy(Sender: TObject);
@@ -39,7 +40,7 @@ implementation
 
 procedure TForm1.FormCreate(Sender: TObject);
 var
-  argv: array of PChar;
+  argv: array of PAlByte;
   format: TALEnum;
   size: TALSizei;
   freq: TALSizei;
@@ -50,10 +51,13 @@ var
   Env: TAluInt;
 
 begin
+  InitOpenAL;
+  ReadOpenALExtensions; //eax functions are now available in the openal unit
+
   AlutInit(nil,argv);
 
   AlGenBuffers(1, @buffer);
-  AlutLoadWavFile('footsteps.wav', format, data, size, freq, loop);
+  AlutLoadWavFile('../Media/footsteps.wav', format, data, size, freq, loop);
   AlBufferData(buffer, format, data, size, freq);
   AlutUnloadWav(format, data, size, freq);
 
@@ -69,26 +73,30 @@ begin
   AlListenerfv ( AL_VELOCITY, @listenervel);
   AlListenerfv ( AL_ORIENTATION, @listenerori);
 
-  // Check for EAX 2.0 support
-  alIsExtensionPresent('EAX2.0');
-  FnName := 'EAXSet';
-  eaxSet := alGetProcAddress(FnName);
-  FnName := 'EAXGet';
-  eaxGet := alGetProcAddress(FnName);
+  Label1.Caption := 'No EAX';
 
-  //set the effect
-  Env := EAX_ENVIRONMENT_BATHROOM;
-  eaxSet(DSPROPSETID_EAX20_ListenerProperties,
+  // Check for EAX 2.0 support
+  if alIsExtensionPresent('EAX2.0') then
+  begin
+    Label1.Caption := 'EAX2.0 available';
+
+    //set the effect
+    Env := EAX_ENVIRONMENT_BATHROOM;
+    eaxSet(DSPROPSETID_EAX20_ListenerProperties,
          DSPROPERTY_EAXLISTENER_ENVIRONMENT or
          DSPROPERTY_EAXLISTENER_DEFERRED,
          0, @Env, sizeof(TALuint));
-  // Commit settings on source 0
-  eaxSet(DSPROPSETID_EAX20_BufferProperties,
+
+    // Commit settings on source 0
+    eaxSet(DSPROPSETID_EAX20_BufferProperties,
          DSPROPERTY_EAXBUFFER_COMMITDEFERREDSETTINGS,
          source, nil, 0);
-  // Commit Listener settings
-  eaxSet(DSPROPSETID_EAX20_ListenerProperties,
+
+    // Commit Listener settings
+    eaxSet(DSPROPSETID_EAX20_ListenerProperties,
          DSPROPERTY_EAXLISTENER_COMMITDEFERREDSETTINGS, 0, nil, 0);
+
+  end;
 
 end;
 
