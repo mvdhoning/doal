@@ -1,9 +1,9 @@
 object Form1: TForm1
   Left = 192
   Top = 114
-  Width = 177
-  Height = 162
   Caption = 'OpenAL #1'
+  ClientHeight = 135
+  ClientWidth = 169
   Color = clBtnFace
   Font.Charset = DEFAULT_CHARSET
   Font.Color = clWindowText
