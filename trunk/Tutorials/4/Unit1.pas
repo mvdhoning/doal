@@ -3,7 +3,7 @@ unit Unit1;
 interface
 
 uses
-  Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs, al, altypes, alut,
+  Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs, OpenAL,
   StdCtrls, ExtCtrls;
 
 type
@@ -53,7 +53,7 @@ implementation
 
 procedure TForm1.FormCreate(Sender: TObject);
 var
-  argv: array of PChar;
+  argv: array of PAlByte;
   format: TALEnum;
   size: TALSizei;
   freq: TALSizei;
@@ -61,18 +61,19 @@ var
   data: TALVoid;
 
 begin
+  InitOpenAL;
   AlutInit(nil,argv);
 
   AlGenBuffers(numbuffers, @buffer);
-  AlutLoadWavFile('footsteps.wav', format, data, size, freq, loop);
+  AlutLoadWavFile('../Media/footsteps.wav', format, data, size, freq, loop);
   AlBufferData(buffer[walk], format, data, size, freq);
   AlutUnloadWav(format, data, size, freq);
 
-  AlutLoadWavFile('ding.wav', format, data, size, freq, loop);
+  AlutLoadWavFile('../Media/ding.wav', format, data, size, freq, loop);
   AlBufferData(buffer[ding], format, data, size, freq);
   AlutUnloadWav(format, data, size, freq);
 
-  AlutLoadWavFile('phaser.wav', format, data, size, freq, loop);
+  AlutLoadWavFile('../Media/phaser.wav', format, data, size, freq, loop);
   AlBufferData(buffer[zap], format, data, size, freq);
   AlutUnloadWav(format, data, size, freq);
 
