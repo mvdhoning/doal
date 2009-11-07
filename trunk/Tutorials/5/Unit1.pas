@@ -3,7 +3,7 @@ unit Unit1;
 interface
 
 uses
-  Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs, al, altypes, alut,
+  Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs, OpenAL,
   StdCtrls;
 
 type
@@ -39,7 +39,7 @@ implementation
 
 procedure TForm1.FormCreate(Sender: TObject);
 var
-  argv: array of PChar;
+  argv: array of PAlByte;
   format: TALEnum;
   size: TALSizei;
   freq: TALSizei;
@@ -47,6 +47,7 @@ var
   data: TALVoid;
 
 begin
+  InitOpenAL;
 
   Play.Enabled:=False;
   Stop.Enabled:=False;
@@ -54,11 +55,11 @@ begin
 
   AlutInit(nil,argv);
 
-  AlGenBuffers(0, @buffer);
+  AlGenBuffers(1, @buffer);
   if alGetError = AL_NO_ERROR then
 
   begin
-    AlutLoadWavFile('ding.wav', format, data, size, freq, loop);
+    AlutLoadWavFile('../Media/ding.wav', format, data, size, freq, loop);
 
     AlBufferData(buffer, format, data, size, freq);
     if alGetError = AL_NO_ERROR then
