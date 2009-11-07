@@ -4,7 +4,7 @@ interface
 
 uses
   Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs,
-  StdCtrls, ExtCtrls, al, altypes, alut, oooal, ThdTimer;
+  StdCtrls, ExtCtrls, OpenAL, oooal, thdtimer;
 
 type
   TForm1 = class(TForm)
@@ -35,6 +35,8 @@ type
     Volume: TLabel;
     Chan_Teller: TLabel;
     Chan_Teller_Effect: TLabel;
+    stopsongbutton: TButton;
+//    ThreadedTimer1: TThreadedTimer;
     procedure LoadButtonClick(Sender: TObject);
     procedure FormDestroy(Sender: TObject);
     procedure TrackOrderListMouseDown(Sender: TObject;
@@ -43,6 +45,7 @@ type
     procedure PlaySampleButtonClick(Sender: TObject);
     procedure Timer1Timer(Sender: TObject);
     procedure PlaySongButtonClick(Sender: TObject);
+    procedure stopsongbuttonClick(Sender: TObject);
   private
     { Private declarations }
   public
@@ -306,8 +309,9 @@ end;
 procedure TForm1.FormCreate(Sender: TObject);
 var
   teller, t: integer;
-  argv: array of PChar;
+  argv: array of PAlByte;
 begin
+  InitOpenAL;
   //activate openal
   AlutInit(nil,argv);
 
@@ -656,6 +660,11 @@ timer.Caption:='timer1: '+IntToStr(1000 div ((125 shl 1) div 5))+'ms';
 ThreadedTimer1.Interval:=1000 div ((125 shl 1) div 5);
 ThreadedTimer1.Enabled:=True; //start playing
 
+end;
+
+procedure TForm1.stopsongbuttonClick(Sender: TObject);
+begin
+  ThreadedTimer1.Enabled:=False; //stop playing
 end;
 
 end.

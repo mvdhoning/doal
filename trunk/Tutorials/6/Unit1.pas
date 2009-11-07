@@ -56,15 +56,18 @@ begin
   DecimalSeparator:='.';
 
   AlutInit(nil,argv);
+  ReadOpenALExtensions;
 
   Sound1:=TalObject.Create;
-  Sound1.LoadFromFile('../Media/ding.wav');
+  Sound1.Buffer.LoadFromFile('..\Media\ding.wav');
+  Sound1.source.AssignBuffer(Sound1.buffer.buffer);
   Sound1.Update;
 
   Sound2:=TalObject.Create;
-  Sound2.LoadFromFile('../Media/phaser.wav');
-  Sound2.loop:=AL_TRUE;
+  Sound2.Buffer.LoadFromFile('..\Media\phaser.wav');
+  Sound2.Buffer.loop:=AL_TRUE;
   Sound2.Gain:=0.5;
+  Sound2.source.AssignBuffer(Sound2.buffer.buffer);
   Sound2.Update;
 
   AlListenerfv ( AL_POSITION, @listenerpos);
