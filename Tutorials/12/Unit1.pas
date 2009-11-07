@@ -52,9 +52,10 @@ var
 
 begin
   InitOpenAL;
-  ReadOpenALExtensions; //eax functions are now available in the openal unit
 
   AlutInit(nil,argv);
+
+  ReadOpenALExtensions; //eax functions are now available in the openal unit
 
   AlGenBuffers(1, @buffer);
   AlutLoadWavFile('../Media/footsteps.wav', format, data, size, freq, loop);
