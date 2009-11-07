@@ -3,7 +3,7 @@ unit Unit1;
 interface
 
 uses
-  Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs, openal, efxutil, 
+  Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs, OpenAL, efxutil,
   StdCtrls;
 
 type
@@ -13,7 +13,7 @@ type
     Pause: TButton;
     SelectDevice: TComboBox;
     SetDevice: TButton;
-    EffectEnabled: TCheckBox;
+    EffectEnabled2: TCheckBox;
     procedure FormCreate(Sender: TObject);
     procedure PlayClick(Sender: TObject);
     procedure FormDestroy(Sender: TObject);
@@ -136,13 +136,12 @@ end;
 
 procedure TForm1.FormCreate(Sender: TObject);
 var
-  devicelist, defaultdevice: PALCubyte;
+  devicelist, defaultdevice: PAnsiChar;
   devices: TStringList;
   loop: integer;
 
 begin
   InitOpenAL;
-  ReadOpenALEFXUtil;
 
   //enumerate devices
   defaultDevice := '';
@@ -155,12 +154,16 @@ begin
   devices:=TStringList.Create;
 
   //make devices tstringlist
-  devices.Add(string(devicelist));
+  if devicelist<>'' then
+  begin
+  devices.Add(ansistring(devicelist));
   for loop:=0 to 12 do
   begin
     StrCopy(Devicelist, @Devicelist[strlen(pchar(devices.text))-(loop+1)]);
     if length(DeviceList)<=0 then break; //exit loop if no more devices are found
     devices.Add(string(Devicelist));
+  end;
+
   end;
 
   //fill the combobox
@@ -174,11 +177,11 @@ end;
 
 procedure TForm1.PlayClick(Sender: TObject);
 begin
-  if EffectEnabled.Checked then
+  if EffectEnabled2.Checked then
     alSource3i(source, AL_AUXILIARY_SEND_FILTER, uiEffectSlot, 0, AL_FILTER_NULL)
   else
     alSource3i(source, AL_AUXILIARY_SEND_FILTER, AL_EFFECTSLOT_NULL, 0, AL_FILTER_NULL);
-    
+
   AlSourcePlay(source);
 end;
 
@@ -254,7 +257,7 @@ begin
   AlGenBuffers(1, @buffer);
   For Loop:=0 to 1000 do
     data[loop] := Round(50*sin(loop*(5*pi)/50.0)+128);
-  alBufferData(buffer, AL_FORMAT_MONO8, @data, length(data), 11024);
+  alBufferData(buffer, AL_FORMAT_MONO8, @data, length(data)-1, 11024);
 
   //Create Sources
   AlGenSources(1, @source);
@@ -279,6 +282,7 @@ begin
 
   //Read Extension functions
   ReadOpenALExtensions;
+  ReadOpenALEFXUtil;
 
   //Now we are ready to create the effect
   bEffectCreated := false;
@@ -333,6 +337,7 @@ begin
 
   // Load Effect into Auxiliary Effect Slot
   alAuxiliaryEffectSloti(uiEffectSlot, AL_EFFECTSLOT_EFFECT, uiEffect);
+
 
 end;
 

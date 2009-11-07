@@ -1585,11 +1585,11 @@ var
 
   //Obtain the address of a function (usually an extension)
   // with the name fname. All addresses are context-independent.
-  alIsExtensionPresent: function(fname: Pchar): TALboolean; cdecl;
+  alIsExtensionPresent: function(fname: PAnsiChar): TALboolean; cdecl;
 
   //Obtain the address of a function (usually an extension)
   //with the name fname. All addresses are context-independent.
-  alGetProcAddress: function(fname: PALuByte): Pointer; cdecl;
+  alGetProcAddress: function(fname: PAnsiChar): Pointer; cdecl;
 
   //Obtain the integer value of an enumeration (usually an extension) with the name ename.
   alGetEnumValue: function(ename: PALuByte): TALenum; cdecl;
@@ -1760,12 +1760,12 @@ var
   //Extension support.
   //Query for the presence of an extension, and obtain any appropriate
   //function pointers and enum values.
-  alcIsExtensionPresent: function(device: TALCdevice; extName: PALuByte): TALCboolean; cdecl;
+  alcIsExtensionPresent: function(device: TALCdevice; extName: PAnsiChar): TALCboolean; cdecl;
   alcGetProcAddress: function(device: TALCdevice; funcName: PALuByte): TALCvoid; cdecl;
   alcGetEnumValue: function(device: TALCdevice; enumName: PALuByte): TALCenum; cdecl;
 
   //Query functions
-  alcGetString: function(device: TALCdevice; param: TALCenum): PALCubyte; cdecl;
+  alcGetString: function(device: TALCdevice; param: TALCenum): PAnsiChar; cdecl;
   alcGetIntegerv: procedure(device: TALCdevice; param: TALCenum; size: TALCsizei; data: PALCint); cdecl;
 
   //Capture functions
@@ -1968,14 +1968,14 @@ end;
 {$ENDIF}
 
 //ProcName can be case sensitive !!!
-function alProcedure(ProcName : string) : Pointer;
+function alProcedure(ProcName : PAnsiChar) : Pointer;
 begin
 Result := NIL;
 if Addr(alGetProcAddress) <> NIL then
- Result := alGetProcAddress(PChar(PAnsiChar(AnsiString(ProcName))) );
+ Result := alGetProcAddress(ProcName);
 if result <> NIL then
  exit;
-Result := GetProcAddress(LibHandle, PChar(ProcName));
+Result := GetProcAddress(LibHandle, ProcName);
 end;
 
 {$IFDEF ALUT}
