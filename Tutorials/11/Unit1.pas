@@ -3,7 +3,7 @@ unit Unit1;
 interface
 
 uses
-  Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs, al, altypes, alut,
+  Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs, OpenAL,
   StdCtrls;
 
 type
@@ -11,7 +11,6 @@ type
     Play: TButton;
     Stop: TButton;
     Pause: TButton;
-    Label1: TLabel;
     procedure FormCreate(Sender: TObject);
     procedure PlayClick(Sender: TObject);
     procedure FormDestroy(Sender: TObject);
@@ -51,7 +50,7 @@ implementation
 
 procedure TForm1.FormCreate(Sender: TObject);
 var
-  argv: PChar;
+  argv: PAlByte;
   format: TALEnum;
   size: TALSizei;
   freq: TALSizei;
@@ -61,6 +60,8 @@ var
   oggfile: Tmemorystream;
 
 begin
+  InitOpenAL;
+
   AlutInit(nil,argv);
 
   //calculate the sine waveform
