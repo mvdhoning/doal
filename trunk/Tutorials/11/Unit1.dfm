@@ -1,9 +1,9 @@
 object Form1: TForm1
   Left = 192
   Top = 114
-  Width = 177
-  Height = 200
-  Caption = 'OpenAL #1'
+  Caption = 'OpenAL #11'
+  ClientHeight = 125
+  ClientWidth = 169
   Color = clBtnFace
   Font.Charset = DEFAULT_CHARSET
   Font.Color = clWindowText
@@ -15,13 +15,6 @@ object Form1: TForm1
   OnDestroy = FormDestroy
   PixelsPerInch = 96
   TextHeight = 13
-  object Label1: TLabel
-    Left = 24
-    Top = 128
-    Width = 32
-    Height = 13
-    Caption = 'Label1'
-  end
   object Play: TButton
     Left = 48
     Top = 16
