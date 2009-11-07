@@ -44,7 +44,7 @@ implementation
 
 procedure TForm1.FormCreate(Sender: TObject);
 var
-  devicelist, defaultdevice: PALCubyte;
+  devicelist, defaultdevice: PAnsiChar;
   devices: TStringList;
   loop: integer;
 
@@ -54,7 +54,7 @@ begin
   //enumerate devices
   defaultDevice := '';
   deviceList := '';
-  if alcIsExtensionPresent(nil,pchar('ALC_ENUMERATION_EXT')) = TRUE then
+  if alcIsExtensionPresent(nil,'ALC_ENUMERATION_EXT') = TRUE then
   begin
    defaultDevice := alcGetString(nil, ALC_DEFAULT_DEVICE_SPECIFIER);
    deviceList := alcGetString(nil, ALC_DEVICE_SPECIFIER);
