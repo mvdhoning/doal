@@ -3,7 +3,7 @@ unit Unit1;
 interface
 
 uses
-  Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs, al, altypes, alut,
+  Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs, OpenAL,
   StdCtrls, ExtCtrls;
 
 type
@@ -48,7 +48,7 @@ implementation
 
 procedure TForm1.FormCreate(Sender: TObject);
 var
-  argv: array of PChar;
+  argv: array of PalByte;
   format: TALEnum;
   size: TALSizei;
   freq: TALSizei;
@@ -56,13 +56,14 @@ var
   data: TALVoid;
 
 begin
+  InitOpenAL();
   AlutInit(nil,argv);
 
   AlGenBuffers(numbuffers, @buffer);
-  AlutLoadWavFile('ding.wav', format, data, size, freq, loop);
+  AlutLoadWavFile('..\Media\ding.wav', format, data, size, freq, loop);
   AlBufferData(buffer[0], format, data, size, freq);
   AlutUnloadWav(format, data, size, freq);
-  AlutLoadWavFile('phaser.wav', format, data, size, freq, loop);
+  AlutLoadWavFile('..\Media\phaser.wav', format, data, size, freq, loop);
   AlBufferData(buffer[1], format, data, size, freq);
   AlutUnloadWav(format, data, size, freq);
 
@@ -81,6 +82,7 @@ end;
 
 procedure TForm1.PlayClick(Sender: TObject);
 begin
+  finished:=false;
   AlSourcePlay(source);
 end;
 
@@ -93,6 +95,7 @@ end;
 
 procedure TForm1.StopClick(Sender: TObject);
 begin
+  finished:=true;
   AlSourceStop(source);
 end;
 
@@ -103,18 +106,17 @@ end;
 
 procedure TForm1.Timer1Timer(Sender: TObject);
 begin
-  alGetSourcei(source, AL_BUFFERS_PROCESSED, @processed);
-  if processed = 2 then
+  if not finished then
   begin
-//   finished:=true;
-//   alsourcestop(source);
-     alsourceplay(source);
+    alGetSourcei(source, AL_BUFFERS_PROCESSED, @processed);
+    if processed = 2 then
+    begin
+      alsourceplay(source);
+    end;
+  end else
+  begin
+    alsourcestop(source);
   end;
-//  if finished then
-//  begin
-//    finished:=false;
-//    alsourceplay(source);
-//  end;
 end;
 
 end.
