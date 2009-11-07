@@ -1,9 +1,9 @@
 object Form1: TForm1
   Left = 196
   Top = 114
-  Width = 633
-  Height = 480
   Caption = 'Form1'
+  ClientHeight = 453
+  ClientWidth = 625
   Color = clBtnFace
   Font.Charset = DEFAULT_CHARSET
   Font.Color = clWindowText
@@ -145,23 +145,17 @@ object Form1: TForm1
     object Splitter1: TSplitter
       Left = 161
       Top = 15
-      Width = 3
       Height = 88
-      Cursor = crHSplit
     end
     object Splitter2: TSplitter
       Left = 285
       Top = 15
-      Width = 3
       Height = 88
-      Cursor = crHSplit
     end
     object Splitter3: TSplitter
       Left = 409
       Top = 15
-      Width = 3
       Height = 88
-      Cursor = crHSplit
     end
     object TrackDataC1: TListBox
       Left = 2
@@ -219,6 +213,15 @@ object Form1: TForm1
     TabOrder = 5
     OnClick = PlaySongButtonClick
   end
+  object stopsongbutton: TButton
+    Left = 64
+    Top = 311
+    Width = 75
+    Height = 25
+    Caption = 'Stop Play'
+    TabOrder = 6
+    OnClick = stopsongbuttonClick
+  end
   object OpenDialog: TOpenDialog
     Filter = 'MOD|*.mod'
     Title = 'Open MOD file'
@@ -227,8 +230,7 @@ object Form1: TForm1
   end
   object ThreadedTimer1: TThreadedTimer
     OnTimer = Timer1Timer
-    ThreadPriority = tpHigher
-    Left = 16
-    Top = 320
+    Left = 288
+    Top = 48
   end
 end
