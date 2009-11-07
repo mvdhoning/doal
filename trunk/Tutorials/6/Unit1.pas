@@ -3,7 +3,7 @@ unit Unit1;
 interface
 
 uses
-  Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs, al, altypes, alut, oooal, StdCtrls;
+  Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs, OpenAL, oooal, StdCtrls;
 
 type
   TForm1 = class(TForm)
@@ -37,7 +37,8 @@ type
 
 var
   Form1: TForm1;
-  sound1, sound2 : TalObject;
+  sound1 : TalObject;
+  sound2 : TalObject;
   listenerpos: array [0..2] of TALfloat= ( 0.0, 0.0, 0.0);
   listenervel: array [0..2] of TALfloat= ( 0.0, 0.0, 0.0);
   listenerori: array [0..5] of TALfloat= ( 0.0, 0.0, -1.0, 0.0, 1.0, 0.0);
@@ -48,19 +49,20 @@ implementation
 
 procedure TForm1.FormCreate(Sender: TObject);
 var
-  argv: array of PChar;
+  argv: array of PAlByte;
 
 begin
+  InitOpenAL;
   DecimalSeparator:='.';
 
   AlutInit(nil,argv);
 
   Sound1:=TalObject.Create;
-  Sound1.LoadFromFile('ding.wav');
+  Sound1.LoadFromFile('../Media/ding.wav');
   Sound1.Update;
 
   Sound2:=TalObject.Create;
-  Sound2.LoadFromFile('phaser.wav');
+  Sound2.LoadFromFile('../Media/phaser.wav');
   Sound2.loop:=AL_TRUE;
   Sound2.Gain:=0.5;
   Sound2.Update;
