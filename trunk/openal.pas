@@ -2240,10 +2240,10 @@ begin
     //go to end of wavheader
     stream.seek((8-44)+12+4+WavHeader.FormatHeaderSize+4,soFromCurrent); //hmm crappy...
 
+    getmem(readname,4); //only alloc memory once, thanks to zy.
     //loop to rest of wave file data chunks
     repeat
       //read chunk name
-      getmem(readname,4);
       stream.Read(readname^, 4);
       name := readname[0]+readname[1]+readname[2]+readname[3];
       if name='data' then
@@ -2274,6 +2274,7 @@ begin
         stream.Position:=stream.Position+readint;
       end;
     until stream.Position>=stream.size;
+    freemem(readname);
 
     loop:= 0;
 end;
